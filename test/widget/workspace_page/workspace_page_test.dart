@@ -70,6 +70,45 @@ void main() {
     expect(overflowMenuButtonFinder, findsOneWidget);
   });
 
+  testWidgets('Advanced Options dialog flow', (tester) async {
+    await tester.pumpWidget(sut);
+    await tester.pumpAndSettle();
+
+    final overflowMenuButtonFinder = find.widgetWithIcon(
+      PopupMenuButton<OverflowMenuOption>,
+      Icons.more_vert,
+    );
+
+    expect(overflowMenuButtonFinder, findsOneWidget);
+
+    await tester.tap(overflowMenuButtonFinder);
+    await tester.pumpAndSettle();
+
+    final advancedOptionsFinder = find.text('Advanced Options');
+    expect(advancedOptionsFinder, findsOneWidget);
+
+    await tester.tap(advancedOptionsFinder);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Advanced Options'), findsOneWidget);
+
+    expect(find.text('Antialiasing'), findsOneWidget);
+    expect(find.text('Smoothing'), findsOneWidget);
+
+    final switches = tester.widgetList<Switch>(find.byType(Switch));
+    for (final s in switches) {
+      expect(s.value, false);
+    }
+
+    await tester.tap(find.byType(Switch).first);
+    await tester.pump();
+
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Advanced Options'), findsNothing);
+  });
+
   group('Fullscreen functionality', () {
     setUp(() {
       final lightTheme = LightPaintroidThemeData();
