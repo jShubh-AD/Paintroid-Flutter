@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paintroid/core/models/image_meta_data.dart';
 import 'package:paintroid/ui/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<ImageMetaData?> showAdvancedOptionsDialog(BuildContext context) =>
     showGeneralDialog<ImageMetaData?>(
@@ -19,6 +20,29 @@ class AdvancedOptionsDialog extends StatefulWidget {
 class _AdvancedOptionsDialogState extends State<AdvancedOptionsDialog> {
   bool antialiasing = false;
   bool smoothing = false;
+
+  final antialiasingKey = 'antialiasing_enabled';
+  final smoothingKey = 'smoothing_enabled';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+   setState(() {
+     antialiasing = prefs.getBool(antialiasingKey) ?? false;
+     smoothing = prefs.getBool(smoothingKey) ?? false;
+   });
+  }
+
+  Future<void> _setPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool(antialiasingKey, antialiasing);
+    prefs.setBool(smoothingKey, smoothing);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +100,12 @@ class _AdvancedOptionsDialogState extends State<AdvancedOptionsDialog> {
 
   TextButton get _saveButton {
     return TextButton(
-      onPressed: () => Navigator.of(context).pop(),
+      onPressed: () async{
+        await _setPreferences();
+        if(mounted){
+          Navigator.of(context).pop();
+        }
+      },
       child: Text(
         'OK',
         style: TextStyle(color: PaintroidTheme.of(context).primaryColor),

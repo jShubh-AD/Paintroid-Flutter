@@ -9,6 +9,7 @@ import 'package:paintroid/ui/pages/workspace_page/components/top_bar/overflow_me
 import 'package:paintroid/ui/pages/workspace_page/components/top_bar/top_app_bar.dart';
 import 'package:paintroid/ui/pages/workspace_page/workspace_page.dart';
 import 'package:paintroid/ui/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockWorkspaceStateProvider extends WorkspaceStateProvider {
   @override
@@ -26,6 +27,7 @@ void main() {
   late Widget sut;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     final lightTheme = LightPaintroidThemeData();
     final darkTheme = DarkPaintroidThemeData();
 
