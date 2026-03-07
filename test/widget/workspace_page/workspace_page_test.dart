@@ -74,11 +74,7 @@ void main() {
     await tester.pumpWidget(sut);
     await tester.pumpAndSettle();
 
-    final overflowMenuButtonFinder = find.widgetWithIcon(
-      PopupMenuButton<OverflowMenuOption>,
-      Icons.more_vert,
-    );
-
+    final overflowMenuButtonFinder = find.byIcon(Icons.more_vert);
     expect(overflowMenuButtonFinder, findsOneWidget);
 
     await tester.tap(overflowMenuButtonFinder);

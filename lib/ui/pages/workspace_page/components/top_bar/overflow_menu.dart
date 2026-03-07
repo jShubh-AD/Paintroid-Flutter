@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oxidized/oxidized.dart';
+import 'package:paintroid/ui/shared/dialogs/advanced_options_dialog.dart';
 import 'package:toast/toast.dart';
 
 import 'package:paintroid/core/database/project_database.dart';
@@ -21,7 +22,8 @@ enum OverflowMenuOption {
   saveImage,
   saveProject,
   loadImage,
-  newImage;
+  newImage,
+  advancedOptions;
 
   String localizedLabel(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -36,6 +38,8 @@ enum OverflowMenuOption {
         return localizations.newImage;
       case OverflowMenuOption.saveProject:
         return localizations.saveProject;
+      case OverflowMenuOption.advancedOptions:
+        return localizations.advancedOptions;
     }
   }
 }
@@ -82,6 +86,9 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
         break;
       case OverflowMenuOption.newImage:
         ioHandler.newImage(context, this);
+        break;
+      case OverflowMenuOption.advancedOptions:
+        showAdvancedOptionsDialog(context);
         break;
     }
   }
